@@ -121,6 +121,15 @@ export const interchanges = [
 
 export const projects = [
   {
+    line: 'orange',
+    title: '01mo: coaching intelligence platform',
+    description:
+      'A platform for personal trainers and the clients they coach: a mobile-first PWA for clients and a desktop console for trainers. Every recommendation traces back to structured facts about the client (goals, injuries, constraints), so each explanation can be audited. Built as a modular monolith with 17 domain modules on Next.js, MongoDB Atlas and S3 storage.',
+    stack: ['Next.js', 'TypeScript', 'MongoDB', 'S3', 'Three.js'],
+    link: 'https://www.1mo.fit/',
+    linkLabel: 'Visit 1mo.fit',
+  },
+  {
     line: 'green',
     title: 'Semantic search and chat assistant',
     description:
@@ -163,7 +172,8 @@ export const stationIndex = [
   ['LangChain', ['green']],
   ['MCP', ['yellow', 'blue']],
   ['Microservices', ['red', 'yellow']],
-  ['MongoDB', ['violet']],
+  ['MongoDB', ['violet', 'orange']],
+  ['Next.js', ['orange']],
   ['n8n', ['yellow']],
   ['OAuth 2.0 + SCIM', ['yellow']],
   ['PostgreSQL', ['red', 'violet', 'magenta']],
@@ -183,6 +193,7 @@ export const lineNames = {
   green: 'Green Line · RAG assistant',
   violet: 'Violet Line · AkhandJyoti',
   magenta: 'Magenta Line · Thomas Scott',
+  orange: 'Orange Line · 01mo',
 }
 
 export const education = {

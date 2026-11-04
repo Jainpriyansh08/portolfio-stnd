@@ -143,7 +143,7 @@ function Projects() {
   return (
     <section id="projects" aria-labelledby="projects-h" className="mx-auto max-w-[90rem] px-4 pt-32 sm:px-8">
       <h2 id="projects-h" className="text-[clamp(2rem,1.4rem+2vw,3rem)] font-black">Projects</h2>
-      <p className="mt-3 max-w-[60ch] text-ink-2">Branch lines: three more systems I designed and built.</p>
+      <p className="mt-3 max-w-[60ch] text-ink-2">Branch lines: more systems I designed and built.</p>
       <ul className="mt-10 list-none border-b border-rule p-0">
         {projects.map((p) => (
           <li key={p.title} className={`l-${p.line} grid grid-cols-1 gap-x-10 gap-y-3 border-t border-rule py-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)_auto]`}>
@@ -155,9 +155,13 @@ function Projects() {
               <p className="max-w-[68ch] text-ink-2">{p.description}</p>
               <p className="mt-2 text-[0.9375rem] font-semibold">{S(p.stack.join(' · '))}</p>
             </div>
-            <a href={p.link} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1.5 self-start font-bold">
-              View code<span className="sr-only"> for {p.title} on GitHub</span> <ArrowIcon />
-            </a>
+            {p.link ? (
+              <a href={p.link} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1.5 self-start font-bold">
+                {p.linkLabel || <>View code<span className="sr-only"> for {p.title} on GitHub</span></>} <ArrowIcon />
+              </a>
+            ) : (
+              <span className="inline-flex min-h-11 items-center self-start font-bold text-ink-2">Private repo</span>
+            )}
           </li>
         ))}
       </ul>
@@ -170,7 +174,7 @@ function Dot({ line }) {
 }
 
 function Skills() {
-  const used = ['blue', 'yellow', 'red', 'green', 'violet', 'magenta']
+  const used = ['blue', 'yellow', 'red', 'orange', 'green', 'violet', 'magenta']
   return (
     <section id="skills" aria-labelledby="skills-h" className="mx-auto max-w-[90rem] px-4 pt-32 sm:px-8">
       <h2 id="skills-h" className="text-[clamp(2rem,1.4rem+2vw,3rem)] font-black">Skills, by where I used them</h2>

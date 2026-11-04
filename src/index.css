@@ -17,6 +17,7 @@
   --line-green: #17763f;
   --line-violet: #7b3fa0;
   --line-magenta: #be1a78;
+  --line-orange: #a84a0c;
   --signage: #13306b;
   --signage-ink: #ffffff;
   --signage-ink-2: #c9d3ea;
@@ -39,6 +40,7 @@
     --line-green: #45c27c;
     --line-violet: #b585e0;
     --line-magenta: #ef5ba6;
+    --line-orange: #f5904a;
     --signage: #1b3a7a;
     --focus: #6b9bf0;
   }
@@ -86,6 +88,7 @@ p, li { text-wrap: pretty; }
 .l-green { --line: var(--line-green); }
 .l-violet { --line: var(--line-violet); }
 .l-magenta { --line: var(--line-magenta); }
+.l-orange { --line: var(--line-orange); }
 
 /* Line badge: the map's only chip. */
 .badge {
