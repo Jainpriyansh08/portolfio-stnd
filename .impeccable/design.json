@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T15:37:49.862839+00:00",
+  "title": "Design System: Priyansh Jain — Network Map",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "oklch(97.1% 0.003 219.5)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#3f4040",
+          "#5d5e5e",
+          "#7f8081",
+          "#a3a5a5",
+          "#c8cbcc",
+          "#eceff0"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(20.9% 0.013 264.2)",
+        "tonalRamp": [
+          "#090b10",
+          "#21242a",
+          "#3d4045",
+          "#5b5e62",
+          "#7e8084",
+          "#a3a4a7",
+          "#cacacc",
+          "#eeeef0"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "oklch(43.5% 0.026 268.1)",
+        "tonalRamp": [
+          "#080b12",
+          "#20242e",
+          "#3a404d",
+          "#585d6c",
+          "#7b808d",
+          "#a0a4af",
+          "#c7cad2",
+          "#eceef3"
+        ]
+      },
+      "line-blue": {
+        "role": "primary",
+        "displayName": "Blue Line",
+        "canonical": "oklch(49.3% 0.169 259.9)",
+        "tonalRamp": [
+          "#00052f",
+          "#001e5a",
+          "#073a88",
+          "#1b58b9",
+          "#4a7ed5",
+          "#79a5ed",
+          "#aaccff",
+          "#d7f0ff"
+        ]
+      },
+      "line-red": {
+        "role": "secondary",
+        "displayName": "Red Line",
+        "canonical": "oklch(55.8% 0.200 24.3)",
+        "tonalRamp": [
+          "#250000",
+          "#4e0003",
+          "#7b0313",
+          "#ab1b25",
+          "#da4344",
+          "#f67974",
+          "#ffaba4",
+          "#ffd8d1"
+        ]
+      },
+      "line-yellow": {
+        "role": "secondary",
+        "displayName": "Yellow Line",
+        "canonical": "oklch(81.1% 0.166 85.0)",
+        "tonalRamp": [
+          "#100a02",
+          "#2c230d",
+          "#4f3d12",
+          "#755916",
+          "#a07a16",
+          "#ce9c11",
+          "#fac133",
+          "#ffe87f"
+        ]
+      },
+      "line-green": {
+        "role": "tertiary",
+        "displayName": "Green Line",
+        "canonical": "oklch(49.9% 0.121 152.3)",
+        "tonalRamp": [
+          "#001201",
+          "#002e0e",
+          "#004e24",
+          "#13703b",
+          "#4b9261",
+          "#7cb48b",
+          "#acd7b7",
+          "#d9f8e0"
+        ]
+      },
+      "line-violet": {
+        "role": "tertiary",
+        "displayName": "Violet Line",
+        "canonical": "oklch(48.7% 0.157 310.4)",
+        "tonalRamp": [
+          "#160024",
+          "#340d49",
+          "#552572",
+          "#793d9d",
+          "#9967ba",
+          "#b992d6",
+          "#dbbdf2",
+          "#fae5ff"
+        ]
+      },
+      "line-magenta": {
+        "role": "tertiary",
+        "displayName": "Magenta Line",
+        "canonical": "oklch(53.5% 0.207 352.7)",
+        "tonalRamp": [
+          "#24000f",
+          "#4c002a",
+          "#770047",
+          "#a60e67",
+          "#cf438a",
+          "#ec78ad",
+          "#ffaad2",
+          "#ffd7f4"
+        ]
+      },
+      "signage": {
+        "role": "neutral",
+        "displayName": "Signage Navy",
+        "canonical": "oklch(32.6% 0.109 262.4)",
+        "tonalRamp": [
+          "#00052d",
+          "#071f53",
+          "#213d75",
+          "#435d8e",
+          "#6b81a9",
+          "#94a5c4",
+          "#c0cbdf",
+          "#e9effa"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name in the hero only."
+      },
+      "heading": {
+        "displayName": "Section heading",
+        "purpose": "One per section."
+      },
+      "station-title": {
+        "displayName": "Station title",
+        "purpose": "A result with its number."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, 68ch measure."
+      },
+      "map-label": {
+        "displayName": "Map label",
+        "purpose": "Station labels on the network map, sized by container width."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "lift",
+        "value": "1100ms easeOutExpo",
+        "purpose": "The printed map tilting into the 3D network, once per load."
+      },
+      {
+        "name": "state",
+        "value": "150ms ease-out",
+        "purpose": "Button and link colour changes."
+      },
+      {
+        "name": "fade",
+        "value": "400ms ease-out",
+        "purpose": "Cross-fade from SVG map to WebGL canvas; line dimming on focus (200ms)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg (map shown)",
+        "value": "1024px"
+      },
+      {
+        "name": "xl (title over map)",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action: Email me.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Email me</a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:.55rem 1.1rem .45rem;border-radius:999px;background:var(--ink,#15181e);color:var(--paper,#f3f6f7);font:700 1rem/1 'Overpass Variable',Overpass,sans-serif;text-decoration:none;transition:background-color 150ms ease-out}.ds-btn-primary:hover{background:var(--line-blue,#1d5bbf);color:#fff}.ds-btn-primary:focus-visible{outline:3px solid var(--focus,#1d5bbf);outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Resume and other secondary actions.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Resume (PDF)</a>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;min-height:44px;padding:.55rem 1.1rem .45rem;border-radius:999px;border:1.5px solid var(--ink,#15181e);color:var(--ink,#15181e);font:700 1rem/1 'Overpass Variable',Overpass,sans-serif;text-decoration:none;transition:background-color 150ms ease-out,color 150ms ease-out}.ds-btn-secondary:hover{background:var(--ink,#15181e);color:var(--paper,#f3f6f7)}.ds-btn-secondary:focus-visible{outline:3px solid var(--focus,#1d5bbf);outline-offset:3px}"
+    },
+    {
+      "name": "Line Badge",
+      "kind": "chip",
+      "refersTo": "line-badge",
+      "description": "Names a line; the only chip on the site.",
+      "html": "<span class=\"ds-badge\">Blue Line</span>",
+      "css": ".ds-badge{display:inline-flex;background:var(--line-blue,#1d5bbf);color:#fff;font:700 .8125rem/1 'Overpass Variable',Overpass,sans-serif;padding:.42em .7em .32em;border-radius:999px}"
+    },
+    {
+      "name": "Strip Map",
+      "kind": "custom",
+      "description": "Route diagram of one job: a line with ring stations, one per result.",
+      "html": "<ol class=\"ds-strip\"><li><strong>10x payment capacity</strong><p>Multi-rail payment engine at sub-100 ms.</p></li><li><strong>₹150Cr+ a month</strong><p>Marketplace bookings.</p></li></ol>",
+      "css": ".ds-strip{position:relative;list-style:none;margin:0;padding:0;font-family:'Overpass Variable',Overpass,sans-serif;color:var(--ink,#15181e)}.ds-strip::before{content:'';position:absolute;left:11px;top:14px;bottom:14px;width:8px;border-radius:4px;background:var(--line-red,#cf2a33)}.ds-strip li{position:relative;padding-left:3rem}.ds-strip li+li{margin-top:1.75rem}.ds-strip li::before{content:'';position:absolute;left:5px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--paper,#f3f6f7);border:4px solid var(--ink,#15181e);box-sizing:border-box}.ds-strip strong{font-weight:900;font-size:1.25rem}.ds-strip p{margin:.25rem 0 0;color:var(--ink-2,#4b5160)}"
+    },
+    {
+      "name": "Contact Panel",
+      "kind": "custom",
+      "refersTo": "contact-panel",
+      "description": "The terminus: signage navy with the email set large.",
+      "html": "<section class=\"ds-panel\"><h2>Get in touch</h2><a href=\"#\">priyansh0192@gmail.com</a></section>",
+      "css": ".ds-panel{background:var(--signage,#13306b);color:#fff;padding:3rem 2rem;font-family:'Overpass Variable',Overpass,sans-serif}.ds-panel h2{margin:0;font-weight:900;font-size:2.25rem}.ds-panel a{display:inline-block;margin-top:1.5rem;color:#fff;font-weight:900;font-size:2rem;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.18em}.ds-panel a:focus-visible{outline:3px solid #fff;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Network Map",
+    "overview": "A career drawn as a metro network: jobs are lines, results are stations, skills carried between jobs are interchanges. The map leads; the page below keeps the same grammar with strip maps, branch lines, a station index and a signage terminus.",
+    "keyCharacteristics": [
+      "Full line-colour palette on a cool paper ground",
+      "One signage family (Overpass) with tabular figures",
+      "One authored motion: the map lifting into 3D and trains running",
+      "Every number traceable to the resume"
+    ],
+    "rules": [
+      {
+        "name": "One line, one colour",
+        "body": "A colour always means its line, never decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "No monospace",
+        "body": "Data is set in the signage face with tabular figures.",
+        "section": "typography"
+      },
+      {
+        "name": "Flat page, deep map",
+        "body": "Only the map has depth.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Put a number on every station.",
+      "Keep claims traceable to the resume.",
+      "Keep map labels as focusable links."
+    ],
+    "donts": [
+      "No gradient text, glows, blobs or grid backgrounds.",
+      "No kickers or numbered section labels.",
+      "No motion outside the map."
+    ]
+  }
+}

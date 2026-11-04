@@ -1,320 +1,208 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
-import { motion, useScroll, useSpring } from 'framer-motion'
-import { ArrowUpRight, Download, Mail, MapPin, Menu, X, GraduationCap, Trophy } from 'lucide-react'
-import { profile, stats, experience, projects, skills, education, achievements } from './data'
+import NetworkMap from './components/NetworkMap'
+import { ArrowIcon, DownloadIcon, GithubIcon, LinkedinIcon, MailIcon, Roundel } from './components/Icons'
+import { profile, lines, interchanges, projects, stationIndex, toolbox, lineNames, education, recognition } from './data'
 
-const HeroScene = lazy(() => import('./components/HeroScene'))
-
-const GithubIcon = (p) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" {...p}>
-    <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z" />
-  </svg>
-)
-const LinkedinIcon = (p) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" {...p}>
-    <path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z" />
-  </svg>
-)
+// Overpass's middle dot sits tight, so separators are spaced in CSS.
+const S = (text) => text.split(' · ').flatMap((part, i) => (i ? [' ', <span key={`s${i}`} className="sep">·</span>, ' ', part] : [part]))
 
 const NAV = [
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'contact', label: 'Contact' },
+  ['experience', 'Experience'],
+  ['projects', 'Projects'],
+  ['skills', 'Skills'],
+  ['contact', 'Contact'],
 ]
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: (i = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] } }),
-}
-
-function Reveal({ children, i = 0, className = '' }) {
+function Header() {
   return (
-    <motion.div className={className} variants={fadeUp} custom={i} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }}>
-      {children}
-    </motion.div>
-  )
-}
-
-function SectionTitle({ index, title }) {
-  return (
-    <Reveal className="mb-12 flex items-center gap-4">
-      <span className="font-mono text-sm text-accent">{index}.</span>
-      <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
-      <span className="h-px flex-1 bg-line" />
-    </Reveal>
-  )
-}
-
-function Socials({ className = '' }) {
-  const links = [
-    profile.github && { href: profile.github, label: 'GitHub', Icon: GithubIcon },
-    profile.linkedin && { href: profile.linkedin, label: 'LinkedIn', Icon: LinkedinIcon },
-    { href: `mailto:${profile.email}`, label: 'Email', Icon: (p) => <Mail size={18} {...p} /> },
-  ].filter(Boolean)
-  return (
-    <div className={`flex gap-3 ${className}`}>
-      {links.map(({ href, label, Icon }) => (
-        <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
-          className="grid h-10 w-10 place-items-center rounded-full border border-line text-muted transition hover:border-accent hover:text-ink">
-          <Icon />
-        </a>
-      ))}
-    </div>
-  )
-}
-
-function Navbar() {
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition ${scrolled ? 'border-b border-line bg-bg/75 backdrop-blur-xl' : ''}`}>
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <a href="#top" className="font-mono text-lg font-semibold">
-          <span className="text-accent">&lt;</span>PJ<span className="text-accent"> /&gt;</span>
-        </a>
-        <ul className="hidden items-center gap-8 md:flex">
-          {NAV.map((n, i) => (
-            <li key={n.id}>
-              <a href={`#${n.id}`} className="text-sm text-muted transition hover:text-ink">
-                <span className="mr-1 font-mono text-xs text-accent">0{i + 1}.</span>{n.label}
+    <header className="mx-auto flex max-w-[90rem] flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 pt-3 sm:px-8">
+      <a href="#top" className="inline-flex min-h-11 items-center gap-2.5 font-extrabold no-underline">
+        <Roundel />
+        <span>Priyansh Jain</span>
+      </a>
+      <nav aria-label="Sections">
+        <ul className="-mx-2 flex flex-wrap items-center">
+          {NAV.map(([id, label]) => (
+            <li key={id}>
+              <a href={`#${id}`} className="inline-flex min-h-11 items-center px-2 font-semibold text-ink-2 no-underline hover:text-ink hover:underline">
+                {label}
               </a>
             </li>
           ))}
-          <li>
-            <a href={profile.resume} target="_blank" rel="noreferrer"
-              className="rounded-lg border border-accent px-4 py-2 font-mono text-sm text-accent transition hover:bg-accent/10">
-              Resume
+          <li className="ml-2 hidden sm:block">
+            <a href={profile.resume} className="btn btn-secondary min-h-11 py-1 text-[0.95rem]" type="application/pdf">
+              <DownloadIcon /> Resume
             </a>
           </li>
         </ul>
-        <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">
-          {open ? <X /> : <Menu />}
-        </button>
       </nav>
-      {open && (
-        <motion.ul initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-          className="space-y-1 border-b border-line bg-bg/95 px-5 pb-5 backdrop-blur-xl md:hidden">
-          {[...NAV, { id: 'resume', label: 'Resume' }].map((n) => (
-            <li key={n.id}>
-              <a href={n.id === 'resume' ? profile.resume : `#${n.id}`} onClick={() => setOpen(false)}
-                className="block py-2 text-muted hover:text-ink">{n.label}</a>
-            </li>
-          ))}
-        </motion.ul>
-      )}
     </header>
   )
 }
 
-function Typewriter({ words }) {
-  const [i, setI] = useState(0)
-  const [text, setText] = useState('')
-  const [deleting, setDeleting] = useState(false)
-  useEffect(() => {
-    const word = words[i % words.length]
-    const done = !deleting && text === word
-    const empty = deleting && text === ''
-    const t = setTimeout(() => {
-      if (done) return setDeleting(true)
-      if (empty) { setDeleting(false); setI((x) => x + 1); return }
-      setText(word.slice(0, text.length + (deleting ? -1 : 1)))
-    }, done ? 1600 : deleting ? 35 : 70)
-    return () => clearTimeout(t)
-  }, [text, deleting, i, words])
+function Actions() {
   return (
-    <span className="font-mono text-accent-2">
-      {text}<span className="ml-0.5 inline-block w-2 animate-pulse bg-accent-2">&nbsp;</span>
-    </span>
+    <div className="flex flex-wrap items-center gap-3">
+      <a href={`mailto:${profile.email}`} className="btn btn-primary"><MailIcon /> Email me</a>
+      <a href={profile.resume} className="btn btn-secondary" type="application/pdf"><DownloadIcon /> Resume (PDF)</a>
+      <a href={profile.github} className="btn btn-icon" target="_blank" rel="noreferrer" aria-label="GitHub profile"><GithubIcon /></a>
+      <a href={profile.linkedin} className="btn btn-icon" target="_blank" rel="noreferrer" aria-label="LinkedIn profile"><LinkedinIcon /></a>
+    </div>
+  )
+}
+
+// Below 1024px the map would be unreadable, so the hero shows the same
+// network as a vertical route diagram.
+function RouteOverview() {
+  const transfer = (a, b) => interchanges.find((x) => x.lines.includes(a) && x.lines.includes(b))
+  return (
+    <ol className="mt-10 list-none p-0 lg:hidden" aria-label="Career route, most recent first">
+      {lines.map((l, i) => {
+        const next = lines[i + 1]
+        const x = next && transfer(l.id, next.id)
+        return (
+          <li key={l.id} className={`l-${l.id}`}>
+            <a href={`#line-${l.id}`} className="group grid grid-cols-[30px_minmax(0,1fr)] gap-x-4 no-underline">
+              <span className="relative flex justify-center" aria-hidden="true">
+                <span className="absolute inset-y-0 w-2 rounded bg-[var(--line)]" style={{ boxShadow: '0 0 0 1px var(--line-casing, transparent)' }} />
+                <span className="relative mt-1 size-5 rounded-full border-4 border-ink bg-paper" />
+              </span>
+              <span className="pb-6">
+                <span className="badge">{l.name}</span>
+                <span className="mt-2 block text-lg font-extrabold group-hover:underline">{l.company}</span>
+                <span className="block text-ink-2">{S(`${l.role} · ${l.period}`)}</span>
+                <span className="mt-1 block text-ink-2">{S(l.stations.map((s) => s.title).join(' · '))}</span>
+              </span>
+            </a>
+            {x && (
+              <div className="grid grid-cols-[30px_minmax(0,1fr)] gap-x-4 pb-6" aria-hidden="true">
+                <span className="flex justify-center"><span className="size-7 rounded-full border-[5px] border-ink bg-paper" /></span>
+                <span className="self-center text-sm text-ink-2"><strong className="text-ink">{x.title}</strong>: carried from {next.company.replace(/ \(.*\)/, '')} to {l.company}</span>
+              </div>
+            )}
+          </li>
+        )
+      })}
+    </ol>
   )
 }
 
 function Hero() {
   return (
-    <section id="top" className="relative flex min-h-svh items-center overflow-hidden pt-16">
-      <div className="grid-bg pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-accent/20 blur-[120px]" />
-      <div className="pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-accent-2/10 blur-[120px]" />
-      <div className="absolute inset-0 opacity-30 md:left-[42%] md:opacity-100">
-        <Suspense fallback={null}><HeroScene /></Suspense>
-      </div>
-      <div className="relative mx-auto w-full max-w-6xl px-5">
-        <motion.p initial="hidden" animate="show" variants={fadeUp} custom={0} className="mb-5 font-mono text-sm text-accent">
-          Hi, my name is
-        </motion.p>
-        <motion.h1 initial="hidden" animate="show" variants={fadeUp} custom={1}
-          className="font-display text-5xl font-bold leading-[1.02] tracking-tight sm:text-7xl lg:text-8xl">
-          {profile.name}.
-        </motion.h1>
-        <motion.h2 initial="hidden" animate="show" variants={fadeUp} custom={2}
-          className="mt-3 font-display text-2xl font-semibold text-muted sm:text-4xl">
-          I build systems that <span className="grad-text">scale</span>.
-        </motion.h2>
-        <motion.p initial="hidden" animate="show" variants={fadeUp} custom={3} className="mt-6 max-w-xl text-base text-muted sm:text-lg">
-          {profile.tagline}
-        </motion.p>
-        <motion.div initial="hidden" animate="show" variants={fadeUp} custom={4} className="mt-5 text-sm sm:text-base">
-          <span className="text-muted">Currently focused on → </span>
-          <Typewriter words={profile.roles} />
-        </motion.div>
-        <motion.div initial="hidden" animate="show" variants={fadeUp} custom={5} className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#projects" className="group inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-white shadow-lg shadow-accent/25 transition hover:-translate-y-0.5">
-            View my work <ArrowUpRight size={18} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
-          <a href={profile.resume} download className="inline-flex items-center gap-2 rounded-lg border border-line bg-bg/60 px-6 py-3 font-medium backdrop-blur transition hover:border-accent">
-            <Download size={18} /> Resume
-          </a>
-          <Socials />
-        </motion.div>
-      </div>
-      <a href="#about" aria-label="Scroll down" className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:block">
-        <div className="flex h-10 w-6 justify-center rounded-full border border-muted/50 pt-2">
-          <motion.span animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 1.6 }} className="h-2 w-1 rounded-full bg-accent" />
+    <section id="top" aria-labelledby="name" className="mx-auto max-w-[90rem] px-4 pt-10 sm:px-8 lg:pt-8">
+      <div className="relative">
+        <div className="max-w-[36rem] xl:absolute xl:left-0 xl:top-[3%] xl:z-10 xl:w-[39%] xl:max-w-none">
+          <h1 id="name" className="text-[clamp(2.25rem,1rem+5.2vw,5.25rem)] font-black leading-[0.95] tracking-[-0.025em] [overflow-wrap:anywhere]">
+            {profile.name}
+          </h1>
+          <p className="mt-4 text-lg font-bold">
+            {profile.role} at {profile.company} <span className="font-medium text-ink-2">{S(` · ${profile.location}`)}</span>
+          </p>
+          <p className="mt-3 max-w-[34rem] text-ink-2">{profile.intro}</p>
+          <div className="mt-6"><Actions /></div>
         </div>
-      </a>
-    </section>
-  )
-}
-
-function About() {
-  return (
-    <section id="about" className="mx-auto max-w-6xl px-5 py-28">
-      <SectionTitle index="01" title="About me" />
-      <div className="grid gap-12 lg:grid-cols-5">
-        <div className="space-y-5 text-lg leading-relaxed text-muted lg:col-span-3">
-          <Reveal><p>{profile.summary}</p></Reveal>
-          <Reveal i={1}>
-            <p>
-              Right now I'm a <span className="text-ink">{profile.role}</span> at <span className="text-ink">{profile.company}</span>,
-              leading architecture for contractor lifecycle and compliance platforms, and owning API reliability. Before that I
-              built identity infrastructure and GenAI automation at MoEngage, and payments and marketplace systems at Betterhalf.ai (YC W’21).
-            </p>
-          </Reveal>
-          <Reveal i={2} className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm">
-            <span className="inline-flex items-center gap-2"><MapPin size={16} className="text-accent" />{profile.location}</span>
-            <span className="inline-flex items-center gap-2"><GraduationCap size={16} className="text-accent" />{education.degree}, {education.school}</span>
-          </Reveal>
+        <div className="mt-8 hidden lg:block xl:mt-0">
+          <NetworkMap />
         </div>
-        <div className="grid grid-cols-2 gap-4 lg:col-span-2">
-          {stats.map((s, i) => (
-            <Reveal key={s.label} i={i} className="card p-5">
-              <div className="font-display text-3xl font-bold grad-text">{s.value}</div>
-              <div className="mt-2 text-sm text-muted">{s.label}</div>
-            </Reveal>
-          ))}
-        </div>
+        <RouteOverview />
       </div>
     </section>
   )
 }
 
 function Experience() {
-  const [active, setActive] = useState(0)
-  const job = experience[active]
   return (
-    <section id="experience" className="mx-auto max-w-6xl px-5 py-28">
-      <SectionTitle index="02" title="Where I've worked" />
-      <Reveal className="flex flex-col gap-8 md:flex-row">
-        <div className="flex overflow-x-auto md:w-64 md:shrink-0 md:flex-col" role="tablist">
-          {experience.map((e, i) => (
-            <button key={e.company} role="tab" aria-selected={active === i} onClick={() => setActive(i)}
-              className={`whitespace-nowrap border-b-2 px-5 py-3 text-left font-mono text-sm transition md:border-b-0 md:border-l-2 ${
-                active === i ? 'border-accent bg-accent/10 text-accent' : 'border-line text-muted hover:bg-white/5 hover:text-ink'}`}>
-              {e.company}
-            </button>
-          ))}
-        </div>
-        <motion.div key={active} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.35 }} className="flex-1">
-          <h3 className="font-display text-2xl font-semibold">
-            {job.role} <span className="text-accent">@ {job.company}</span>
-          </h3>
-          <p className="mt-1 font-mono text-sm text-muted">{job.period} · {job.location}</p>
-          <p className="mt-4 italic text-muted">{job.blurb}</p>
-          <ul className="mt-5 space-y-4">
-            {job.points.map((p) => (
-              <li key={p} className="relative pl-6 leading-relaxed text-muted">
-                <span className="absolute left-0 top-1 text-accent">▹</span>{p}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {job.tags.map((t) => (
-              <span key={t} className="rounded-full bg-accent/10 px-3 py-1 font-mono text-xs text-accent">{t}</span>
-            ))}
-          </div>
-        </motion.div>
-      </Reveal>
+    <section id="experience" aria-labelledby="experience-h" className="mx-auto max-w-[90rem] px-4 pt-28 sm:px-8">
+      <h2 id="experience-h" className="text-[clamp(2rem,1.4rem+2vw,3rem)] font-black">Experience</h2>
+      <p className="mt-3 max-w-[60ch] text-ink-2">Three lines, newest first. Each station is something I shipped and what it changed.</p>
+      <div className="mt-14 space-y-20">
+        {lines.map((l) => (
+          <article key={l.id} id={`line-${l.id}`} aria-labelledby={`line-${l.id}-h`} className={`l-${l.id} grid scroll-mt-8 grid-cols-1 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,8fr)] lg:gap-16`}>
+            <header className="lg:sticky lg:top-8 lg:self-start">
+              <span className="badge">{l.name}</span>
+              <h3 id={`line-${l.id}-h`} className="mt-3 text-[1.75rem] font-black">{l.company}</h3>
+              <p className="mt-1 font-bold">{l.role}</p>
+              <p className="text-ink-2">{S(`${l.period} · ${l.location}`)}</p>
+              <p className="mt-4 max-w-[46ch] text-ink-2">{l.blurb}</p>
+            </header>
+            <ol className="strip">
+              {l.stations.map((s) => (
+                <li key={s.id} id={`st-${s.id}`}>
+                  <strong className="text-xl font-black [overflow-wrap:anywhere]">{s.title}</strong>
+                  <p className="mt-1 max-w-[68ch] text-ink-2">{s.text}</p>
+                </li>
+              ))}
+            </ol>
+          </article>
+        ))}
+      </div>
     </section>
   )
 }
 
 function Projects() {
   return (
-    <section id="projects" className="mx-auto max-w-6xl px-5 py-28">
-      <SectionTitle index="03" title="Things I've built" />
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((p, i) => (
-          <Reveal key={p.title} i={i}>
-            <motion.a href={p.link} target="_blank" rel="noreferrer" whileHover={{ y: -6 }}
-              className="card group flex h-full flex-col p-6">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-xs uppercase tracking-wider text-accent-2">{p.kind}</span>
-                <ArrowUpRight className="text-muted transition group-hover:text-accent" size={20} />
-              </div>
-              <h3 className="mt-4 font-display text-xl font-semibold transition group-hover:text-accent">{p.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
-              <div className="mt-6 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-muted">
-                {p.stack.map((s) => <span key={s}>{s}</span>)}
-              </div>
-            </motion.a>
-          </Reveal>
+    <section id="projects" aria-labelledby="projects-h" className="mx-auto max-w-[90rem] px-4 pt-32 sm:px-8">
+      <h2 id="projects-h" className="text-[clamp(2rem,1.4rem+2vw,3rem)] font-black">Projects</h2>
+      <p className="mt-3 max-w-[60ch] text-ink-2">Branch lines: three more systems I designed and built.</p>
+      <ul className="mt-10 list-none border-b border-rule p-0">
+        {projects.map((p) => (
+          <li key={p.title} className={`l-${p.line} grid grid-cols-1 gap-x-10 gap-y-3 border-t border-rule py-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)_auto]`}>
+            <div>
+              <span className="badge">{lineNames[p.line].split(' · ')[0]}</span>
+              <h3 className="mt-3 text-[1.375rem] font-black">{p.title}</h3>
+            </div>
+            <div>
+              <p className="max-w-[68ch] text-ink-2">{p.description}</p>
+              <p className="mt-2 text-[0.9375rem] font-semibold">{S(p.stack.join(' · '))}</p>
+            </div>
+            <a href={p.link} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1.5 self-start font-bold">
+              View code<span className="sr-only"> for {p.title} on GitHub</span> <ArrowIcon />
+            </a>
+          </li>
         ))}
-      </div>
-      <Reveal className="mt-10 text-center">
-        <a href={profile.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-mono text-sm text-accent hover:underline">
-          More on GitHub <ArrowUpRight size={16} />
-        </a>
-      </Reveal>
+      </ul>
     </section>
   )
 }
 
+function Dot({ line }) {
+  return <span className={`l-${line} inline-block size-3.5 shrink-0 rounded-full bg-[var(--line)]`} style={{ boxShadow: '0 0 0 1px var(--line-casing, transparent)' }} title={lineNames[line]} />
+}
+
 function Skills() {
+  const used = ['blue', 'yellow', 'red', 'green', 'violet', 'magenta']
   return (
-    <section id="skills" className="mx-auto max-w-6xl px-5 py-28">
-      <SectionTitle index="04" title="Toolbox" />
-      <div className="grid gap-6 md:grid-cols-2">
-        {skills.map((g, i) => (
-          <Reveal key={g.group} i={i} className="card p-6">
-            <h3 className="mb-4 font-display text-lg font-semibold">{g.group}</h3>
-            <div className="flex flex-wrap gap-2">
-              {g.items.map((s) => (
-                <span key={s} className="rounded-md border border-line px-3 py-1.5 text-sm text-muted transition hover:border-accent hover:text-ink">{s}</span>
-              ))}
-            </div>
-          </Reveal>
+    <section id="skills" aria-labelledby="skills-h" className="mx-auto max-w-[90rem] px-4 pt-32 sm:px-8">
+      <h2 id="skills-h" className="text-[clamp(2rem,1.4rem+2vw,3rem)] font-black">Skills, by where I used them</h2>
+      <p className="mt-3 max-w-[60ch] text-ink-2">A station index: each technology with the lines it served.</p>
+      <ul className="mt-8 flex list-none flex-wrap gap-x-5 gap-y-2 p-0 text-sm text-ink-2" aria-label="Line key">
+        {used.map((l) => <li key={l} className="flex min-w-0 items-center gap-2"><Dot line={l} /><span className="min-w-0">{S(lineNames[l])}</span></li>)}
+      </ul>
+      <ul className="mt-8 list-none columns-1 gap-10 p-0 sm:columns-2 lg:columns-3">
+        {stationIndex.map(([name, ls]) => (
+          <li key={name} className="flex break-inside-avoid items-baseline gap-3 border-b border-rule py-2.5">
+            <span className="min-w-0 font-bold [overflow-wrap:anywhere]">{name}</span>
+            <span className="ml-auto inline-flex shrink-0 gap-1.5" aria-hidden="true">{ls.map((l) => <Dot key={l} line={l} />)}</span>
+            <span className="sr-only">: {ls.map((l) => lineNames[l]).join(', ')}</span>
+          </li>
         ))}
-      </div>
-      <div className="mt-6 grid gap-6 md:grid-cols-3">
-        <Reveal className="card p-6">
-          <GraduationCap className="text-accent" />
-          <h3 className="mt-3 font-display text-lg font-semibold">{education.degree}</h3>
-          <p className="text-sm text-muted">{education.school} · {education.detail}</p>
-        </Reveal>
-        {achievements.map((a, i) => (
-          <Reveal key={a.title} i={i + 1} className="card p-6">
-            <Trophy className="text-accent-2" />
-            <h3 className="mt-3 font-display text-lg font-semibold">{a.title}</h3>
-            <p className="text-sm text-muted">{a.org} · {a.when}</p>
-          </Reveal>
-        ))}
+      </ul>
+      <p className="mt-8 max-w-[75ch] text-ink-2"><strong className="text-ink">Also in the toolbox:</strong> {toolbox}</p>
+
+      <div className="mt-20 grid gap-10 border-t border-rule pt-10 md:grid-cols-2">
+        <div>
+          <h3 className="text-xl font-black">Education</h3>
+          <p className="mt-2 font-bold">{education.degree}</p>
+          <p className="text-ink-2">{S(`${education.school} · ${education.detail}`)}</p>
+        </div>
+        <div>
+          <h3 className="text-xl font-black">Recognition</h3>
+          <ul className="mt-2 list-none space-y-3 p-0">
+            {recognition.map((r) => (
+              <li key={r.title}><span className="block font-bold">{r.title}</span><span className="text-ink-2">{S(`${r.org} · ${r.when}`)}</span></li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )
@@ -322,42 +210,40 @@ function Skills() {
 
 function Contact() {
   return (
-    <section id="contact" className="mx-auto max-w-3xl px-5 py-32 text-center">
-      <Reveal><p className="font-mono text-sm text-accent">05. What's next?</p></Reveal>
-      <Reveal i={1}><h2 className="mt-4 font-display text-4xl font-bold sm:text-6xl">Let's build something.</h2></Reveal>
-      <Reveal i={2}>
-        <p className="mx-auto mt-6 max-w-xl text-lg text-muted">
-          I'm always up for conversations about distributed systems, payments, or putting AI agents into production.
-          My inbox is open — I'll get back to you.
+    <section id="contact" aria-labelledby="contact-h" className="on-signage mt-32 bg-signage text-[var(--signage-ink)]">
+      <div className="mx-auto max-w-[90rem] px-4 py-24 sm:px-8">
+        <h2 id="contact-h" className="text-[clamp(2rem,1.4rem+2vw,3rem)] font-black">Get in touch</h2>
+        <p className="mt-3 max-w-[56ch] text-[var(--signage-ink-2)]">
+          Hiring for backend, payments, identity or applied AI work? Email is the fastest way to reach me.
         </p>
-      </Reveal>
-      <Reveal i={3} className="mt-10 flex flex-col items-center gap-6">
-        <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-2 rounded-lg border border-accent px-8 py-4 font-mono text-accent transition hover:bg-accent/10">
-          <Mail size={18} /> Say hello
+        <a href={`mailto:${profile.email}`} className="mt-8 inline-block text-[clamp(1.4rem,0.6rem+3.6vw,3.25rem)] font-black [overflow-wrap:anywhere] underline decoration-2 underline-offset-[0.18em] hover:decoration-4">
+          {profile.email}
         </a>
-        <Socials />
-      </Reveal>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <a href={profile.resume} className="btn border-[1.5px] border-[var(--signage-ink)] hover:bg-[var(--signage-ink)] hover:text-[var(--signage)]" type="application/pdf"><DownloadIcon /> Resume (PDF)</a>
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" className="btn border-[1.5px] border-[var(--signage-ink)] hover:bg-[var(--signage-ink)] hover:text-[var(--signage)]"><LinkedinIcon /> LinkedIn</a>
+          <a href={profile.github} target="_blank" rel="noreferrer" className="btn border-[1.5px] border-[var(--signage-ink)] hover:bg-[var(--signage-ink)] hover:text-[var(--signage)]"><GithubIcon /> GitHub</a>
+        </div>
+      </div>
     </section>
   )
 }
 
 export default function App() {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
   return (
     <>
-      <motion.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-gradient-to-r from-accent to-accent-2" />
-      <Navbar />
-      <main>
+      <a href="#main" className="sr-only rounded bg-ink px-4 py-3 font-bold text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50">Skip to content</a>
+      <Header />
+      <main id="main">
         <Hero />
-        <About />
         <Experience />
         <Projects />
         <Skills />
         <Contact />
       </main>
-      <footer className="border-t border-line py-8 text-center font-mono text-xs text-muted">
-        Designed &amp; built by {profile.name} · React · Three.js · Framer Motion
+      <footer className="mx-auto flex max-w-[90rem] flex-wrap justify-between gap-2 px-4 py-8 text-sm text-ink-2 sm:px-8">
+        <span>© 2026 {profile.name}</span>
+        <span>The map is a diagram, not to scale. Built with React and Three.js.</span>
       </footer>
     </>
   )

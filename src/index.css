@@ -1,48 +1,177 @@
 @import "tailwindcss";
+@import "@fontsource-variable/overpass/wght.css";
+
+/* Transit-map world. Every colour is a role; theme switches remap roles. */
+:root {
+  color-scheme: light;
+  --paper: #f3f6f7;
+  --paper-raised: #ffffff;
+  --ink: #15181e;
+  --ink-2: #4b5160;
+  --rule: #d6d9d1;
+  --on-line: #ffffff;
+  --line-red: #cf2a33;
+  --line-yellow: #f2b705;
+  --line-yellow-casing: #8a6500;
+  --line-blue: #1d5bbf;
+  --line-green: #17763f;
+  --line-violet: #7b3fa0;
+  --line-magenta: #be1a78;
+  --signage: #13306b;
+  --signage-ink: #ffffff;
+  --signage-ink-2: #c9d3ea;
+  --focus: #1d5bbf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --paper: #111317;
+    --paper-raised: #1a1d22;
+    --ink: #eceee8;
+    --ink-2: #a7adb8;
+    --rule: #2c3038;
+    --on-line: #111317;
+    --line-red: #f0545b;
+    --line-yellow: #f5c63a;
+    --line-yellow-casing: #f5c63a;
+    --line-blue: #6b9bf0;
+    --line-green: #45c27c;
+    --line-violet: #b585e0;
+    --line-magenta: #ef5ba6;
+    --signage: #1b3a7a;
+    --focus: #6b9bf0;
+  }
+}
 
 @theme {
-  --color-bg: #07070b;
-  --color-surface: #0f0f17;
-  --color-line: #1d1d2b;
-  --color-ink: #ececf3;
-  --color-muted: #9090a8;
-  --color-accent: #7c5cff;
-  --color-accent-2: #22d3ee;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-display: "Space Grotesk", "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-paper: var(--paper);
+  --color-raised: var(--paper-raised);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-rule: var(--rule);
+  --color-signage: var(--signage);
+  --font-sans: "Overpass Variable", "Overpass", "Arial Narrow", Arial, sans-serif;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: var(--ink-2) var(--paper);
+  -webkit-text-size-adjust: 100%;
+}
 body {
-  background: var(--color-bg);
-  color: var(--color-ink);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word; /* a word wider than its column breaks instead of spilling */
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
-::selection { background: var(--color-accent); color: white; }
+::selection { background: var(--line-yellow); color: #15181e; }
 
-.grad-text {
-  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+a { text-underline-offset: 0.22em; text-decoration-thickness: 1px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+.on-signage :focus-visible { outline-color: var(--signage-ink); }
+
+h1, h2, h3 { overflow-wrap: break-word; text-wrap: balance; letter-spacing: -0.01em; line-height: 1.1; }
+p, li { text-wrap: pretty; }
+
+/* Line colours as utilities, so data can name a line and stay theme-aware. */
+.l-red { --line: var(--line-red); }
+.l-yellow { --line: var(--line-yellow); --line-casing: var(--line-yellow-casing); --on-line-override: #15181e; }
+.l-blue { --line: var(--line-blue); }
+.l-green { --line: var(--line-green); }
+.l-violet { --line: var(--line-violet); }
+.l-magenta { --line: var(--line-magenta); }
+
+/* Line badge: the map's only chip. */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  background: var(--line);
+  color: var(--on-line-override, var(--on-line));
+  font-weight: 700; font-size: 0.8125rem; letter-spacing: 0.01em;
+  line-height: 1; padding: 0.42em 0.7em 0.32em; border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line-casing, transparent);
+  white-space: nowrap;
 }
-.card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-  border: 1px solid var(--color-line);
-  border-radius: 1rem;
-  transition: border-color .3s, transform .3s;
+@media (prefers-color-scheme: dark) { .l-yellow { --on-line-override: var(--on-line); } }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  min-height: 44px; padding: 0.55rem 1.1rem 0.45rem; border-radius: 999px;
+  font-weight: 700; font-size: 1rem; text-decoration: none;
+  transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out;
 }
-.card:hover { border-color: rgba(124,92,255,.5); }
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: var(--line-blue); color: #fff; }
+.btn-secondary { border: 1.5px solid var(--ink); color: var(--ink); }
+.btn-secondary:hover { background: var(--ink); color: var(--paper); }
+.btn-icon { width: 44px; padding: 0; border: 1.5px solid var(--rule); color: var(--ink); }
+.btn-icon:hover { border-color: var(--ink); }
+
+/* Network map */
+.map-box { container-type: inline-size; position: relative; aspect-ratio: 16 / 9; width: 100%; }
+.map-svg, .map-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-canvas { opacity: 0; transition: opacity 400ms ease-out; }
+.map-box[data-mode="3d"] .map-canvas { opacity: 1; }
+.map-box[data-mode="3d"] .map-svg { opacity: 0; transition: opacity 400ms ease-out; }
+.map-box[data-dim] .map-svg [data-line]:not([data-line~="__active"]) { opacity: 0.18; }
+
+.st-label {
+  --g: 1.6cqw;
+  position: absolute; z-index: 2;
+  width: max-content; max-width: 12.5cqw;
+  font-size: clamp(11px, 1.02cqw, 15px); line-height: 1.2;
+  color: var(--ink); text-decoration: none;
+  transition: opacity 200ms ease-out;
 }
+.st-label strong { display: block; font-weight: 800; font-size: 1.08em; }
+.st-label span { display: block; color: var(--ink-2); font-weight: 500; }
+.st-label:hover strong { text-decoration: underline; }
+.st-label[data-dimmed] { opacity: 0.22; }
+/* Anchor offsets from the station point. */
+.st-label[data-kind="interchange"] { --g: 2.3cqw; }
+.st-label[data-kind="here"] { --g: 3.2cqw; }
+.st-label[data-side="below"] { transform: translate(-50%, var(--g)); text-align: center; }
+.st-label[data-side="above"] { transform: translate(-50%, calc(-100% - var(--g))); text-align: center; }
+.st-label[data-side="above-start"] { transform: translate(-0.6cqw, calc(-100% - var(--g))); }
+.st-label[data-side="below-start"] { transform: translate(-0.6cqw, var(--g)); }
+.st-label[data-side="below-end"] { transform: translate(calc(-100% + 0.6cqw), var(--g)); text-align: right; }
+.st-label[data-side="right"] { transform: translate(var(--g), -50%); }
+/* For stations on an up-right diagonal: sit below the line's onward path. */
+.st-label[data-side="right-down"] { transform: translate(calc(var(--g) + 0.3cqw), 0); }
+.st-label[data-side="left"] { transform: translate(calc(-100% - var(--g)), -50%); text-align: right; }
+.st-label[data-side="above-right"] { transform: translate(var(--g), calc(-100% - 0.4cqw)); }
+
+.st-label .here {
+  display: inline-block; margin-bottom: 0.35em;
+  background: var(--line-blue); color: var(--on-line);
+  font-weight: 800; font-size: 0.9em; padding: 0.3em 0.55em 0.15em; border-radius: 4px;
+}
+/* Overpass sets the middle dot tight on its right; give separators air. */
+.sep { margin-right: 0.18em; }
+
+/* Strip map (the route diagram above a train door) */
+.strip { position: relative; list-style: none; padding: 0; margin: 0; }
+.strip::before {
+  content: ""; position: absolute; left: 11px; top: 14px; bottom: 14px; width: 8px;
+  background: var(--line); border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--line-casing, transparent);
+}
+.strip > li { position: relative; padding-left: 3rem; }
+.strip > li + li { margin-top: 1.75rem; }
+.strip > li::before {
+  content: ""; position: absolute; left: 5px; top: 4px; width: 20px; height: 20px;
+  border-radius: 50%; background: var(--paper); border: 4px solid var(--ink);
+}
+.strip > li:target strong { background: var(--line-yellow); color: #15181e; box-shadow: 0 0 0 4px var(--line-yellow); }
+[id^="st-"] { scroll-margin-top: 6rem; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0ms !important; }
 }

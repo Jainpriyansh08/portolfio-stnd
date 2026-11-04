@@ -1,8 +1,18 @@
 # Priyansh Jain — Portfolio
 
-Personal portfolio site: an animated 3D hero, scroll-reveal sections, and a tabbed experience timeline.
+A career drawn as a metro network map: each job is a line, each shipped result is a station, and skills carried between jobs are interchanges.
 
-**Stack:** React 19 + Vite · Three.js via `@react-three/fiber` / `@react-three/drei` · Framer Motion · Tailwind CSS v4
+**Stack:** React 19 + Vite · Three.js (vanilla, lazy-loaded) for the 3D network · Tailwind CSS v4 · Overpass (self-hosted)
+
+## How it works
+
+- The page is **prerendered** at build time (`scripts/prerender.mjs`), so it has full content without JavaScript and in link previews.
+- The hero map is an **SVG with HTML labels** first. On screens ≥1024px that allow motion and WebGL, `src/map3d.js` loads Three.js, matches the flat map exactly, lifts it into a tilted 3D network, and runs trains along each line. It renders only while on screen and unpaused; a **Pause trains** button stops all motion. Phones and reduced-motion users never download Three.js.
+- Light and dark themes come from CSS variables in `src/index.css`; the 3D scene reads the same variables.
+
+## Edit content
+
+Everything on the page (lines, stations, map positions, projects, skills, links) lives in [`src/data.js`](src/data.js). Map coordinates are on a 16 × 9 grid; every claim should be traceable to the resume in `public/`.
 
 ## Run locally
 
@@ -11,13 +21,8 @@ npm install
 npm run dev
 ```
 
-## Edit content
-
-Everything you see on the page (bio, experience, projects, skills, links) lives in [`src/data.js`](src/data.js).
-Replace `public/Priyansh_Jain_Resume.pdf` to update the downloadable resume.
-
 ## Deploy
 
-Pushing to `main` builds the site and publishes it to GitHub Pages via `.github/workflows/deploy.yml`
-(enable it once under **Settings → Pages → Source: GitHub Actions**).
-It's a static build (`dist/`), so Vercel or Netlify work too with zero config.
+Pushing to `main` builds and publishes to GitHub Pages via `.github/workflows/deploy.yml` (enable once under **Settings → Pages → Source: GitHub Actions**). The social-preview tags in `index.html` assume `https://jainpriyansh08.github.io/portolfio-stnd/`; update them if the site lives elsewhere.
+
+Design decisions are recorded in [`DESIGN.md`](DESIGN.md) and [`PRODUCT.md`](PRODUCT.md).
