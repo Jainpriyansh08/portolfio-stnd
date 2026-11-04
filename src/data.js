@@ -73,7 +73,7 @@ export const projects = [
     description:
       'Production-grade Retrieval-Augmented Generation system using LangChain, FAISS and OpenAI embeddings. Benchmarked chunking strategies and embedding configs with retrieval eval pipelines to improve relevance and reduce hallucinations.',
     stack: ['LangChain', 'FAISS', 'OpenAI', 'Python', 'Evals'],
-    link: 'https://github.com/Jainpriyansh08', // TODO: point to the project repo
+    link: 'https://github.com/Jainpriyansh08/AI_RAG_Powered_Chat_Assistant',
   },
   {
     title: 'AkhandJyoti — Healthcare Ops Platform',
@@ -81,7 +81,7 @@ export const projects = [
     description:
       'Solely designed and built booking infrastructure processing 100K+ daily transactions; tuned MongoDB and PostgreSQL with aggregation pipelines, compound indexes and sharding for high availability without write locks.',
     stack: ['MongoDB', 'PostgreSQL', 'Sharding', 'Python'],
-    link: 'https://github.com/Jainpriyansh08', // TODO: point to the project repo
+    link: 'https://github.com/Jainpriyansh08/akhandjyoti-bookingsystem',
   },
   {
     title: 'Thomas Scott — E-Commerce Listings',
@@ -89,7 +89,7 @@ export const projects = [
     description:
       'Portal to manage product listings across Ajio, Myntra and Amazon from one place, with WeShop AI canvas integration for automated, customizable product image and video generation.',
     stack: ['Java', 'Spring Boot', 'PostgreSQL', 'GenAI'],
-    link: 'https://github.com/Jainpriyansh08', // TODO: point to the project repo
+    link: 'https://github.com/Jainpriyansh08/thomasscott-backend',
   },
 ]
 
