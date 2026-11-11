@@ -571,7 +571,7 @@ export class World {
       this.clearHearts()
     }
     if (stage === 'game') this.spawnHearts(this.reduced ? 6 : 8, true)
-    if (stage === 'ask') this.spawnHearts(this.reduced ? 8 : 16, false)
+    if (stage === 'ask') this.spawnHearts(this.reduced || this.portrait ? 7 : 16, false)
     if (stage === 'intro') {
       this.openT = -1
       this.openFired = false

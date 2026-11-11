@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { you } from '../config.js'
+import { you, nick } from '../config.js'
 import { sfx } from '../lib/sfx.js'
 
 const emit = defineEmits(['yes', 'quip'])
@@ -8,7 +8,7 @@ const emit = defineEmits(['yes', 'quip'])
 const lines = [
   'Okay. Deep breath.',
   'You walked through the fog with me. You caught the hearts. You read all my terrible captions.',
-  `So, ${you === 'you' ? 'I have to ask' : you + ', I have to ask'}…`,
+  `So, ${you === 'you' ? 'I have to ask' : you + (nick ? ' (my favourite ' + nick + ')' : '') + ', I have to ask'}…`,
 ]
 const step = ref(0)         // how many intro lines are visible
 const showAsk = ref(false)
@@ -26,6 +26,7 @@ const noMsgs = [
   'The fog is watching…',
   'Think of the stars ✨',
   'I will bring snacks!',
+  ...(nick ? ['Not very chutta saand of you 🐂'] : []),
   'Last chance to say yes 😌',
   'You are running out of Nos',
   'The No button is exhausted.',
@@ -99,8 +100,9 @@ const termsList = [
       <Transition name="fade">
         <div v-if="showAsk" class="q">
           <h1 class="display">
-            May I have your <span class="u">permission</span> to <em>flirt</em> with {{ you }}?
+            May I have your <span class="u">permission</span> to <em>flirt</em> with you?
           </h1>
+          <p v-if="nick" class="nick">yes, you, {{ nick }} 🐂</p>
           <div class="row">
             <button ref="yesBtn" class="btn primary yes" :style="{ scale: yesScale }" @click="yes">
               Yes, permission granted 💌
@@ -141,6 +143,7 @@ const termsList = [
 .q { display: grid; gap: 22px; justify-items: center; }
 h1 { font-size: clamp(2.1rem, 6.2vw, 4.2rem); max-width: 16ch; text-shadow: 0 6px 40px rgba(5, 8, 25, 0.95); }
 h1 em { color: var(--rose-soft); }
+.nick { font-family: var(--hand); font-size: 1.7rem; color: var(--amber); margin-top: -14px; rotate: -2deg; }
 .u { background: linear-gradient(transparent 70%, rgba(255, 92, 147, 0.55) 70%); padding: 0 0.1em; }
 .row { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: center; min-height: 82px; }
 .yes { font-size: 1.1rem; padding: 1em 1.8em; animation: pulse 1.6s ease-in-out infinite; transition: scale 0.35s cubic-bezier(.3, 1.8, .5, 1), transform 0.18s; }

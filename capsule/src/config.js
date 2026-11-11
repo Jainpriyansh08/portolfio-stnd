@@ -6,7 +6,8 @@
 const params = new URLSearchParams(globalThis.location?.search ?? '')
 
 export const config = {
-  herName: params.get('to') || '',          // '' → the site just says "you"
+  herName: params.get('to') || 'Ayhaesass',  // '' → the site just says "you"
+  nickname: params.get('nick') || 'Chutta Saand', // the cute one 🐂 ('' to hide it)
   myName: params.get('from') || '',         // '' → "me"
 
   // Where her "YES" gets sent. Pick ONE (leave the others empty):
@@ -23,3 +24,4 @@ export const config = {
 
 export const herName = config.herName
 export const you = config.herName || 'you'
+export const nick = config.nickname

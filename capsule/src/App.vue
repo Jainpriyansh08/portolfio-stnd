@@ -10,6 +10,7 @@ import Ask from './components/Ask.vue'
 import Yes from './components/Yes.vue'
 import { memories } from './memories.js'
 import { sfx } from './lib/sfx.js'
+import { nick } from './config.js'
 
 const GOAL = 5
 const stage = ref('intro')       // intro → journey → game → ask → yes
@@ -21,7 +22,7 @@ const box = ref(null)            // lightbox index
 const webgl = ref(true)
 const muted = ref(false)
 const world = ref(null)
-const say = ref('Psst! Hold the glowing seal. I dare you. 😏')
+const say = ref(nick ? `Psst, ${nick}! Hold the glowing seal. I dare you. 😏` : 'Psst! Hold the glowing seal. I dare you. 😏')
 const mood = ref('smirk')
 
 const quip = (t, m = 'happy') => { say.value = t; mood.value = m }
@@ -57,11 +58,11 @@ const finish = () => {
   if (!webgl.value) return goAsk()
   stage.value = 'game'
   caught.value = 0
-  quip('Side quest! The hearts escaped. Catch them!', 'wow')
+  quip(nick ? `Side quest! The hearts escaped. Go get ’em, ${nick} 🐂` : 'Side quest! The hearts escaped. Catch them!', 'wow')
 }
 const onHeart = () => {
   caught.value++
-  const lines = ['Got one!', 'Nice reflexes 😳', 'Halfway there!', 'Almost…', 'ALL CAUGHT!']
+  const lines = ['Got one!', 'Nice reflexes 😳', 'Halfway there!', nick ? 'Unstoppable. Truly a chutta saand.' : 'Almost…', 'ALL CAUGHT!']
   quip(lines[Math.min(caught.value - 1, lines.length - 1)], 'wow')
   if (caught.value >= GOAL) setTimeout(goAsk, 1100)
 }

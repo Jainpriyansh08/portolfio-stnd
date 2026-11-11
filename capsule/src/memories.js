@@ -35,8 +35,8 @@ export const memories = [
   {
     src: 'm06.jpg', label: 'Chapter 6 · Gravity',
     title: 'Graceful on Gravel (ish)',
-    caption: 'A masterclass in balance on a rocky trail. “Graceful” is generous. “Iconic” is accurate.',
-    quip: 'Arms out. Confidence in. Gravity: negotiable.',
+    caption: 'A masterclass in balance on a rocky trail. “Graceful” is generous. “Iconic” is accurate. “Chutta saand on the loose” is most accurate.',
+    quip: 'Chutta Saand in her natural habitat: charging downhill. 🐂',
   },
   {
     src: 'm07.jpg', label: 'Chapter 7 · The Lookout',

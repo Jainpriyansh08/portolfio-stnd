@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { you, config } from '../config.js'
+import { you, nick, config } from '../config.js'
 import { sfx } from '../lib/sfx.js'
 import { startConfetti } from '../lib/confetti.js'
 
@@ -10,7 +10,7 @@ const copied = ref(false)
 const stamped = ref(false)
 let confetti, timer
 
-const message = `✅ PERMISSION GRANTED 😌💌\nYou may now flirt with me. Terms: be sweet, be silly, keep the puns coming.\n— ${config.herName || 'signed, the girl from the fog'}`
+const message = `✅ PERMISSION GRANTED 😌💌\nYou may now flirt with me. Terms: be sweet, be silly, keep the puns coming.\n— ${config.herName || 'signed, the girl from the fog'}${nick ? ' (a.k.a. ' + nick + ' 🐂)' : ''}`
 
 onMounted(() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -50,6 +50,7 @@ const pop = (e) => { confetti?.burst(e.clientX, e.clientY, 40); sfx.play('pop') 
       <h1 class="display">Flirting Permission Slip</h1>
       <dl>
         <div><dt>Granted by</dt><dd>{{ you === 'you' ? 'The girl from the fog' : you }}</dd></div>
+        <div v-if="nick"><dt>Also known as</dt><dd>{{ nick }} 🐂</dd></div>
         <div><dt>Valid</dt><dd>From right now, until further notice</dd></div>
         <div><dt>Terms</dt><dd>Be sweet. Be silly. Keep the puns coming.</dd></div>
       </dl>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onBeforeUnmount, computed } from 'vue'
-import { you } from '../config.js'
+import { you, nick } from '../config.js'
 import { sfx } from '../lib/sfx.js'
 
 const emit = defineEmits(['charge', 'unlock', 'quip'])
@@ -52,6 +52,7 @@ const dash = computed(() => circ * (1 - progress.value))
     <div class="copy">
       <p class="eyebrow">Time Capsule · Nº 001</p>
       <h1 class="display">Something was <em>sealed</em> for {{ you }}.</h1>
+      <p v-if="nick" class="aka">a.k.a. {{ nick }} 🐂</p>
       <p class="sub">A handful of memories, a little mist, and one very important question waiting at the bottom.</p>
     </div>
 
@@ -83,6 +84,7 @@ const dash = computed(() => circ * (1 - progress.value))
 .copy { position: absolute; top: clamp(76px, 10vh, 120px); left: 0; right: 0; padding: 0 24px; display: grid; gap: 14px; justify-items: center; }
 h1 { font-size: clamp(2.2rem, 6.4vw, 4.6rem); max-width: 14ch; text-shadow: 0 6px 40px rgba(5, 8, 25, 0.9); }
 h1 em { font-style: italic; color: var(--rose-soft); }
+.aka { font-family: var(--hand); font-size: clamp(1.5rem, 3.6vw, 2rem); color: var(--amber); margin-top: -6px; rotate: -2deg; text-shadow: 0 2px 20px rgba(5, 8, 25, 0.95); }
 .sub { max-width: 44ch; color: var(--mist-dim); text-shadow: 0 2px 20px rgba(5, 8, 25, 0.95); }
 .seal { pointer-events: auto; position: relative; width: 132px; height: 132px; border-radius: 50%; display: grid; place-items: center; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: transform 0.2s cubic-bezier(.3, 1.6, .5, 1); }
 .seal svg { position: absolute; inset: 0; overflow: visible; }

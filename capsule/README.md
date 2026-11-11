@@ -24,7 +24,7 @@ npm run build      # static site in capsule/dist (host anywhere)
 
 Edit **`src/config.js`**:
 
-- **Her name**: leave empty to say "you", or share a link like `https://your-site/?to=Maya`.
+- **Her name & nickname**: set to Ayhaesass a.k.a. Chutta Saand 🐂. Override with `?to=Name&nick=Nickname`, or set `nickname` to `''` to hide it.
 - **Where her YES goes**: fill in one of `reply.whatsapp`, `reply.sms` or `reply.email`.
   If all are empty the button uses the phone's share sheet (or copies the message).
 
