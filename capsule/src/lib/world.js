@@ -837,7 +837,7 @@ export class World {
       const hx = lerp(this.polaroids[i0].userData.home.x, this.polaroids[i1].userData.home.x, f)
       const z = FIRST_Z + 5.2 - this.current * STEP
       want.set(hx * 0.12 + px * 0.7, 0.2 + py * 0.35, z)
-      look.set(hx * 0.12 + px * 0.2, this.portrait ? -0.35 : 0, z - 8)
+      look.set(hx * 0.12 + px * 0.2, this.portrait ? -1.0 : 0, z - 8)
       k = 2.6
     } else if (this.stage === 'game' || this.stage === 'ask') {
       want.set(px * 0.5, py * 0.3, this.clearZ + 12)

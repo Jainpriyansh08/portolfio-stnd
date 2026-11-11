@@ -79,6 +79,6 @@ const num = (n) => String(n).padStart(2, '0')
 .card-leave-to { opacity: 0; }
 @keyframes wave { 50% { transform: rotate(-10deg) scale(1.08); } }
 @keyframes nudge { 50% { transform: translateX(4px) scale(1.04); } }
-@media (max-width: 899px) { .tip { display: none; } .card { bottom: calc(106px + var(--safe-b)); padding: 16px 18px; } .text { font-size: 0.94rem; } }
+@media (max-width: 899px) { .counter { top: calc(76px + var(--safe-t)); margin-right: 0; } .tip { display: none; } .card { bottom: calc(106px + var(--safe-b)); padding: 16px 18px; } .text { font-size: 0.94rem; } }
 @media (max-width: 899px) and (max-height: 700px) { .card { bottom: calc(92px + var(--safe-b)); } .text { display: none; } }
 </style>
